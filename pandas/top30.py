@@ -27,6 +27,7 @@ def main():
      # create a stacked bar graph
     sorted_by_rating['IMDB Score'].head(30).plot(kind="barh")
     # save the figure as stackedbar.png
+    plt.tight_layout()
     plt.savefig("/home/student/static/stackedbar.png")
 
 if __name__ == "__main__":
