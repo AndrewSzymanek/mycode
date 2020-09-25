@@ -10,8 +10,16 @@ RPG Game
 Commands:
   go [direction]
   get [item]
+  use [item]
 ''')
-
+"""This was modified by Andrew Szymanek
+    I added two rooms: the library and the porch.
+    Then, I made it so you needed the sunglasses to continue to the porch.
+    After that, I made it so that you can't win the game without wearing the sunglasses outside
+    Otherwise, it's game over because you lose your sight!
+    Also added use [item] to the commands menu
+        and the used variable initialized to false
+    That's how the game knows whether or not you used the sunglasses"""
 def showStatus():
   #print the player's current status
   print('---------------------------')
@@ -25,6 +33,8 @@ def showStatus():
 
 #an inventory, which is initially empty
 inventory = []
+
+used = False
 
 #a dictionary linking a room to other rooms
 ## A dictionary linking a room to other rooms
@@ -85,17 +95,32 @@ while True:
   # split allows an items to have a space on them
   # get golden key is returned ["get", "golden key"]          
   move = move.lower().split(" ", 1)
+  
+  #if they type 'use' first
+  if move[0] == 'use':
+      if move[1] in inventory:
+        used = True
+        inventory.remove(move[1])
+      else:
+        print('Whatever it was, ya can\'t use it! Sorry...')
 
   #if they type 'go' first
   if move[0] == 'go':
     #check that they are allowed wherever they want to go
     if move[1] in rooms[currentRoom]:
-      #set the current room to the new room
         if currentRoom == 'Library' and 'sunglasses' in inventory:
-          #make sure someone has collected sunglasses from library before moving on
+          #move from library to porch successfully WITH sunglasses
             currentRoom = rooms[currentRoom][move[1]]
+            #can't move on from library to porch WITHOUT sunglasses
         elif currentRoom == 'Library' and 'sunglasses' not in inventory:
             print("You need the sunglasses first")
+        if currentRoom == 'Dining Room':
+            if used == True:
+                currentRoom = rooms[currentRoom][move[1]]
+            else:
+                print("Oops, you needed to use the sunglasses! Now you've lost your sight. GAME OVER")
+                break
+            #not in the library, condition just sets currentRoom to next room
         else:
             currentRoom = rooms[currentRoom][move[1]]
     #there is no door (link) to the new room
