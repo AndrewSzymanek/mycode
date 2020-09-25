@@ -43,7 +43,8 @@ rooms = {
                 },
             'Library' : {
                     'south' : 'Hall',
-                    'east' : 'Porch'
+                    'east' : 'Porch',
+                    'item' : 'sunglasses'
                 },
             'Porch' : {
                     'east' : 'Dining Room'
@@ -90,7 +91,13 @@ while True:
     #check that they are allowed wherever they want to go
     if move[1] in rooms[currentRoom]:
       #set the current room to the new room
-      currentRoom = rooms[currentRoom][move[1]]
+        if currentRoom == 'Library' and 'sunglasses' in inventory:
+          #make sure someone has collected sunglasses from library before moving on
+            currentRoom = rooms[currentRoom][move[1]]
+        elif currentRoom == 'Library' and 'sunglasses' not in inventory:
+            print("You need the sunglasses first")
+        else:
+            currentRoom = rooms[currentRoom][move[1]]
     #there is no door (link) to the new room
     else:
         print('You can\'t go that way!')
@@ -112,7 +119,7 @@ while True:
       
   ## Define how a player can win
   if currentRoom == 'Garden' and 'key' in inventory and 'potion' in inventory:
-    print('You escaped the house with the ultra rare key and magic potion... YOU WIN!')
+    print('You escaped the house with the ultra rare key and magic potion, plus you protected your eye health... YOU WIN!')
     break
   
   ## If a player enters a room with a monster BUT HAS A COOKIE
